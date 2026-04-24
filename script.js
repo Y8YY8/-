@@ -49,8 +49,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const calcBtn = document.getElementById('calculate-btn');
     const globalError = document.getElementById('global-error');
     const resultsSection = document.getElementById('results-section');
+    const showFullTimelineBtn = document.getElementById('show-full-timeline');
+    let isFullTimelineVisible = false;
 
     calcBtn.addEventListener('click', calculateAge);
+    showFullTimelineBtn.addEventListener('click', () => {
+        isFullTimelineVisible = !isFullTimelineVisible;
+        const timelineBody = document.getElementById('timeline-body');
+        const rows = timelineBody.querySelectorAll('tr');
+        const currentYear = new Date().getFullYear();
+
+        rows.forEach(row => {
+            const year = parseInt(row.dataset.year);
+            if (isFullTimelineVisible) {
+                row.style.display = 'table-row';
+            } else {
+                // Show 5 years before and 5 years after current year by default
+                if (Math.abs(year - currentYear) > 5) {
+                    row.style.display = 'none';
+                } else {
+                    row.style.display = 'table-row';
+                }
+            }
+        });
+        showFullTimelineBtn.textContent = isFullTimelineVisible ? 'Show Less' : 'Show Full Timeline';
+    });
 
     function showError(message) {
         globalError.textContent = message;
@@ -125,6 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Moon Phase Calculation
         document.getElementById('moon-phase').innerHTML = getMoonPhase(y, m, d);
 
+        // New Amazing Discovery Logic
+        updateAmazingDiscovery(inputDate, ageY);
+
+        // Life Timeline Logic
+        updateLifeTimeline(inputDate, ageY);
+
         // Facts Data
         updateFacts(ageY, inputDate);
 
@@ -149,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalMonths = Math.floor(totalDays / 30.436875);
         const totalHours = Math.floor(diffMs / (1000 * 60 * 60));
         const totalMinutes = Math.floor(diffMs / (1000 * 60));
-        const totalSeconds = Math.floor(diffMs / 1000);
         
         const sleepDays = Math.floor(totalDays / 3);
         const mealsCount = totalDays * 3;
@@ -159,7 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('total-days').textContent = formatNumber(totalDays);
         document.getElementById('total-hours').textContent = formatNumber(totalHours);
         document.getElementById('total-minutes').textContent = formatNumber(totalMinutes);
-        document.getElementById('total-seconds').textContent = formatNumber(totalSeconds);
         document.getElementById('sleep-days').textContent = formatNumber(sleepDays);
         document.getElementById('food-meals').textContent = formatNumber(mealsCount);
         
@@ -193,10 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const rDays = Math.floor(remTimeMs / (1000 * 60 * 60 * 24));
             const rHours = Math.floor((remTimeMs / (1000 * 60 * 60)) % 24);
             const rMins = Math.floor((remTimeMs / (1000 * 60)) % 60);
-            const rSecs = Math.floor((remTimeMs / 1000) % 60);
             
             document.getElementById('life-countdown-timer').textContent = 
-                `${remY}y : ${rDays}d : ${String(rHours).padStart(2,'0')}h : ${String(rMins).padStart(2,'0')}m : ${String(rSecs).padStart(2,'0')}s`;
+                `${remY}y : ${rDays}d : ${String(rHours).padStart(2,'0')}h : ${String(rMins).padStart(2,'0')}m`;
         } else {
             document.getElementById('life-progress').style.width = '100%';
             document.getElementById('lived-time').textContent = `Lived: 100%`;
@@ -218,10 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const nbDays = Math.floor(nextBdayMs / (1000 * 60 * 60 * 24));
         const nbHours = Math.floor((nextBdayMs / (1000 * 60 * 60)) % 24);
         const nbMins = Math.floor((nextBdayMs / (1000 * 60)) % 60);
-        const nbSecs = Math.floor((nextBdayMs / 1000) % 60);
 
         document.getElementById('next-birthday-countdown').textContent =
-            `${nbDays}d : ${String(nbHours).padStart(2,'0')}h : ${String(nbMins).padStart(2,'0')}m : ${String(nbSecs).padStart(2,'0')}s`;
+            `${nbDays}d : ${String(nbHours).padStart(2,'0')}h : ${String(nbMins).padStart(2,'0')}m`;
     }
 
     function formatNumber(num) {
@@ -275,6 +300,134 @@ document.addEventListener('DOMContentLoaded', () => {
         2023: "Generative AI like ChatGPT exploded in popularity and capability.",
         2024: "Advancements in AI continue to accelerate into the era of spatial computing."
     };
+
+    const historicalMonthEvents = {
+        1: "The first iPhone was announced (2007) and the Euro became official (2002).",
+        2: "Facebook was founded (2004) and Pluto was discovered (1930).",
+        3: "The World Wide Web proposal was published (1989) and Einstein was born (1879).",
+        4: "Microsoft was founded (1975) and the first space shuttle was launched (1981).",
+        5: "The first movie of Star Wars was released (1977) and Everest was first climbed (1953).",
+        6: "The first iPad was released (2010) and the Internet reached 1 billion users (2005).",
+        7: "The first man walked on the Moon (1969) and Live Aid concerts were held (1985).",
+        8: "Google was incorporated (1998) and the first website went live (1991).",
+        9: "The first text message was sent (1992) and the PC revolution began (1981).",
+        10: "The first-ever email was sent (1971) and the Space Age began with Sputnik (1957).",
+        11: "The Berlin Wall fell (1989) and the first Xbox was released (2001).",
+        12: "The Wright Brothers made their first flight (1903) and DNA structure was modeled (1953)."
+    };
+
+    const ageMilestones = [
+        { age: 10, person: "Malala Yousafzai", action: "started her blog for the BBC" },
+        { age: 12, person: "Anne Frank", action: "received her famous diary" },
+        { age: 16, person: "Greta Thunberg", action: "started her climate strike" },
+        { age: 17, person: "Bill Gates", action: "sold his first computer program" },
+        { age: 19, person: "Mark Zuckerberg", action: "founded Facebook" },
+        { age: 20, person: "Steve Jobs", action: "co-founded Apple" },
+        { age: 21, person: "Elon Musk", action: "started his first company, Zip2" },
+        { age: 23, person: "Jane Goodall", action: "began her research in Gombe" },
+        { age: 26, person: "Albert Einstein", action: "published the theory of relativity" },
+        { age: 30, person: "Jeff Bezos", action: "founded Amazon" },
+        { age: 33, person: "Alexander the Great", action: "had conquered most of the known world" },
+        { age: 40, person: "Stan Lee", action: "created the Fantastic Four" },
+        { age: 52, person: "Ray Kroc", action: "bought McDonald's" },
+        { age: 62, person: "Colonel Sanders", action: "started KFC" }
+    ];
+
+    function updateAmazingDiscovery(birthDate, ageY) {
+        const month = birthDate.getMonth() + 1;
+        const day = birthDate.getDate();
+        const year = birthDate.getFullYear();
+
+        // Season Logic
+        let season = "";
+        let emoji = "";
+        if ((month === 12 && day >= 21) || month <= 2 || (month === 3 && day < 20)) {
+            season = "Winter"; emoji = "❄️";
+        } else if ((month === 3 && day >= 20) || month <= 5 || (month === 6 && day < 21)) {
+            season = "Spring"; emoji = "🌱";
+        } else if ((month === 6 && day >= 21) || month <= 8 || (month === 9 && day < 22)) {
+            season = "Summer"; emoji = "☀️";
+        } else {
+            season = "Autumn"; emoji = "🍂";
+        }
+        document.getElementById('val-season').textContent = season;
+        document.getElementById('icon-season').textContent = emoji;
+
+        // Life Stage Logic
+        const stage = getLifeStage(ageY);
+        document.getElementById('val-stage').textContent = stage.name;
+
+        // Milestone Logic
+        let milestone = ageMilestones.find(m => m.age >= ageY) || ageMilestones[ageMilestones.length - 1];
+        document.getElementById('val-milestone').innerHTML = `<span style="color:var(--primary)">${milestone.person}</span> ${milestone.action}.`;
+
+        // Historic Event Logic
+        document.getElementById('label-event').textContent = `In your birth month (${birthDate.toLocaleString('en-US', {month: 'long'})}):`;
+        document.getElementById('val-event').textContent = historicalMonthEvents[month];
+
+        // World Changes
+        const now = new Date();
+        const yearsLived = (now - birthDate) / (1000 * 60 * 60 * 24 * 365.25);
+        const populationGrowth = Math.floor(yearsLived * 80000000); // Rough estimate of annual growth
+        const earthTravel = Math.floor(yearsLived * 940000000); // Earth travels ~940 million km per year around Sun
+
+        document.getElementById('fact-world-changes').innerHTML = `🌍 Since you were born, the world population has grown by approximately <span class="highlight">${formatNumber(populationGrowth)}</span> people.`;
+        document.getElementById('fact-earth-travel').innerHTML = `🌌 You have traveled about <span class="highlight">${formatNumber(earthTravel)} km</span> through space as Earth orbits the Sun!`;
+    }
+
+    const lifeStages = [
+        { max: 1, name: "Infancy (Breastfeeding)", label: "Infancy" },
+        { max: 3, name: "Early Childhood", label: "Toddler" },
+        { max: 6, name: "Preschool Years", label: "Childhood" },
+        { max: 12, name: "Middle Childhood", label: "School Age" },
+        { max: 14, name: "Early Adolescence", label: "Early Teen" },
+        { max: 17, name: "Middle Adolescence", label: "Adolescence" },
+        { max: 21, name: "Late Adolescence", label: "Young Adult" },
+        { max: 35, name: "Early Adulthood", label: "Adult" },
+        { max: 50, name: "Middle Adulthood", label: "Midlife" },
+        { max: 65, name: "Late Adulthood", label: "Mature" },
+        { max: 100, name: "Late Seniority", label: "Senior" }
+    ];
+
+    function getLifeStage(age) {
+        return lifeStages.find(s => age <= s.max) || lifeStages[lifeStages.length - 1];
+    }
+
+    function updateLifeTimeline(birthDate, currentAge) {
+        const timelineBody = document.getElementById('timeline-body');
+        timelineBody.innerHTML = '';
+        const now = new Date();
+        const currentYear = now.getFullYear();
+
+        // Generate rows for 100 years
+        for (let i = 0; i <= 100; i++) {
+            const year = birthDate.getFullYear() + i;
+            const stage = getLifeStage(i);
+            const row = document.createElement('tr');
+            row.dataset.year = year;
+
+            if (i === currentAge) {
+                row.className = 'current-age';
+            } else if (year > currentYear) {
+                row.className = 'future-age';
+            }
+
+            // Default display logic: show around current year
+            if (Math.abs(year - currentYear) > 5) {
+                row.style.display = 'none';
+            }
+
+            row.innerHTML = `
+                <td>${year}</td>
+                <td>${i === 0 ? 'Birth' : i + ' y.o.'}</td>
+                <td>${stage.name}</td>
+            `;
+            timelineBody.appendChild(row);
+        }
+
+        isFullTimelineVisible = false;
+        showFullTimelineBtn.textContent = 'Show Full Timeline';
+    }
 
     function updateFacts(ageY, birthDate) {
         const birthYear = birthDate.getFullYear();

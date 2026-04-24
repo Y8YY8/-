@@ -95,10 +95,6 @@
                     <div class="stat-value" id="total-minutes">--</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-title">In Seconds</div>
-                    <div class="stat-value" id="total-seconds">--</div>
-                </div>
-                <div class="stat-box">
                     <div class="stat-title">Sleep Days 💤</div>
                     <div class="stat-value" id="sleep-days">--</div>
                 </div>
@@ -117,6 +113,44 @@
                 <div class="stat-box">
                     <div class="stat-title">On Jupiter 🪐</div>
                     <div class="stat-value" id="jupiter-age">--</div>
+                </div>
+            </div>
+
+            <div class="amazing-discovery" id="amazing-discovery-container">
+                <h3>Amazing Discoveries 🎇</h3>
+                <div class="discovery-grid">
+                    <div class="discovery-card">
+                        <div class="discovery-icon" id="icon-season">🍂</div>
+                        <div class="discovery-info">
+                            <div class="discovery-label">Born in</div>
+                            <div class="discovery-value" id="val-season">--</div>
+                        </div>
+                    </div>
+                    <div class="discovery-card">
+                        <div class="discovery-icon" id="icon-stage">🧬</div>
+                        <div class="discovery-info">
+                            <div class="discovery-label">Life Stage</div>
+                            <div class="discovery-value" id="val-stage">--</div>
+                        </div>
+                    </div>
+                    <div class="discovery-card" style="grid-column: span 2;">
+                        <div class="discovery-icon">🚀</div>
+                        <div class="discovery-info">
+                            <div class="discovery-label">At your age</div>
+                            <div class="discovery-value" id="val-milestone">--</div>
+                        </div>
+                    </div>
+                    <div class="discovery-card" style="grid-column: span 2;">
+                        <div class="discovery-icon">📅</div>
+                        <div class="discovery-info">
+                            <div class="discovery-label" id="label-event">Historic Event</div>
+                            <div class="discovery-value" id="val-event">--</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="world-changes">
+                    <p id="fact-world-changes"></p>
+                    <p id="fact-earth-travel"></p>
                 </div>
             </div>
 
@@ -142,7 +176,26 @@
                     <span id="remaining-time">Remaining: --</span>
                 </div>
                 <p id="life-countdown-timer" class="countdown-timer">--</p>
-                <p class="life-note">Based on an average lifespan of 72 years. Make every second count.</p>
+                <p class="life-note">Based on an average lifespan of 72 years. Make every moment count.</p>
+            </div>
+
+            <div class="life-timeline-section">
+                <h3>Life Journey Timeline 🗺️</h3>
+                <div class="timeline-table-wrapper">
+                    <table class="timeline-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Age</th>
+                                <th>Life Stage</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timeline-body">
+                            <!-- Rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+                <button id="show-full-timeline" class="show-more-btn">Show Full Timeline</button>
             </div>
         </section>
     </main>
