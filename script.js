@@ -159,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('total-days').textContent = formatNumber(totalDays);
         document.getElementById('total-hours').textContent = formatNumber(totalHours);
         document.getElementById('total-minutes').textContent = formatNumber(totalMinutes);
-        document.getElementById('total-seconds').textContent = formatNumber(totalSeconds);
         document.getElementById('sleep-days').textContent = formatNumber(sleepDays);
         document.getElementById('food-meals').textContent = formatNumber(mealsCount);
         
@@ -193,10 +192,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const rDays = Math.floor(remTimeMs / (1000 * 60 * 60 * 24));
             const rHours = Math.floor((remTimeMs / (1000 * 60 * 60)) % 24);
             const rMins = Math.floor((remTimeMs / (1000 * 60)) % 60);
-            const rSecs = Math.floor((remTimeMs / 1000) % 60);
-            
             document.getElementById('life-countdown-timer').textContent = 
-                `${remY}y : ${rDays}d : ${String(rHours).padStart(2,'0')}h : ${String(rMins).padStart(2,'0')}m : ${String(rSecs).padStart(2,'0')}s`;
+                `${remY}y : ${rDays}d : ${String(rHours).padStart(2,'0')}h : ${String(rMins).padStart(2,'0')}m`;
         } else {
             document.getElementById('life-progress').style.width = '100%';
             document.getElementById('lived-time').textContent = `Lived: 100%`;
