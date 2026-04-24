@@ -605,3 +605,51 @@ header p {
         grid-column: span 1 !important;
     }
 }
+
+/* Insight Card Special Styling */
+.card-insight {
+    --advice-color: #0ea5e9;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    transition: all 0.5s ease;
+}
+
+.card-insight::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, var(--advice-color) 0%, transparent 70%);
+    opacity: 0.15;
+    animation: rotateGlow 10s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotateGlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.card-insight:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-color: var(--advice-color);
+}
+
+.card-insight .discovery-icon {
+    transition: transform 0.3s ease;
+}
+
+.card-insight:hover .discovery-icon {
+    transform: rotate(15deg) scale(1.2);
+}
+
+.card-insight .discovery-value {
+    color: #f1f5f9;
+    font-weight: 500;
+    line-height: 1.5;
+}

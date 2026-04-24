@@ -333,10 +333,43 @@ document.addEventListener('DOMContentLoaded', () => {
         { age: 62, person: "Colonel Sanders", action: "started KFC" }
     ];
 
+    const ageAdvice = [
+        { min: 0, max: 2, tips: ["Cherish every giggle and milestone; their brain is growing faster now than it ever will again.", "Play is the best way for them to learn about the world and bond with you.", "Ensure they get plenty of sleep; it's when their little bodies do most of their growing."] },
+        { min: 3, max: 5, tips: ["Encourage their curiosity; every 'why' is a step toward understanding their world.", "Read together every day to build a lifelong love for stories and learning.", "Physical activity is key; let them run, jump, and explore to build strong muscles."] },
+        { min: 6, max: 12, tips: ["Support their hobbies; this is a great time for them to discover what they truly love.", "Consistency and routine help them feel secure and focused at school.", "Teach them the value of kindness and empathy through your own daily actions."] },
+        { min: 13, max: 17, tips: ["Listen more than you talk; they're finding their own voice and need to feel heard.", "Encourage healthy screen-time habits to balance digital life with real-world experiences.", "Celebrate their independence while staying a steady, supportive presence in their life."] },
+        { min: 18, max: 22, tips: ["At age 21, most physical growth is complete. Focus on nourishing your body for the long term.", "This is a key time to build financial habits that will serve you for decades to come.", "Travel or explore new cultures; your perspective is expanding more than ever right now."] },
+        { min: 23, max: 30, tips: ["Prioritize quality sleep; it's the foundation for your mental clarity and physical energy.", "Invest in your friendships; the bonds you strengthen now can last a lifetime.", "Don't be afraid to take calculated risks in your career while you have the flexibility."] },
+        { min: 31, max: 40, tips: ["Starting around 40, your eyes may begin to have trouble focusing on close objects. Regular checkups help!", "Strength training becomes more important now to maintain bone density and muscle mass.", "Balance is key; make time for self-care to manage the demands of work and family life."] },
+        { min: 41, max: 50, tips: ["Focus on heart health; a balanced diet and regular cardio are your best long-term investments.", "Stay curious! Learning a new skill now keeps your brain sharp and your spirit young.", "Prioritize experiences over things; the memories you make now will be your greatest treasures."] },
+        { min: 51, max: 65, tips: ["Pay attention to joint health; if you feel persistent pain, consult a specialist to stay active.", "Keep your mind engaged with puzzles, reading, or social clubs to maintain cognitive health.", "Regular health screenings are vital now to catch and manage any changes early and effectively."] },
+        { min: 66, max: 80, tips: ["Stay social! Connecting with friends and family is one of the best ways to boost your mood.", "Gentle movement like walking or swimming keeps your circulation and flexibility at their best.", "Share your wisdom; your life experiences are a valuable gift to the younger generations."] },
+        { min: 81, max: 120, tips: ["Focus on gratitude; reflecting on positive memories can bring a deep sense of peace.", "Stay hydrated and enjoy small, nutritious meals to keep your energy levels steady.", "Surround yourself with things that bring you joy, whether it's music, art, or loved ones."] }
+    ];
+
     function updateAmazingDiscovery(birthDate, ageY) {
         const month = birthDate.getMonth() + 1;
         const day = birthDate.getDate();
         const year = birthDate.getFullYear();
+
+        // Age Advice Logic
+        const adviceGroup = ageAdvice.find(group => ageY >= group.min && ageY <= group.max);
+        if (adviceGroup) {
+            const randomTip = adviceGroup.tips[Math.floor(Math.random() * adviceGroup.tips.length)];
+            const icons = ["💡", "✨", "🌟", "🛡️", "🌱", "🧘"];
+            const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+
+            document.getElementById('val-advice').textContent = randomTip;
+            document.getElementById('icon-advice').textContent = randomIcon;
+
+            // Randomize the glow color slightly for unique experience
+            const hues = [200, 260, 330, 150]; // Blue, Purple, Pink, Green
+            const randomHue = hues[Math.floor(Math.random() * hues.length)];
+            const color = `hsl(${randomHue}, 80%, 60%)`;
+            document.getElementById('advice-card').style.setProperty('--advice-color', color);
+            document.getElementById('icon-advice').style.background = `hsla(${randomHue}, 80%, 60%, 0.15)`;
+            document.getElementById('icon-advice').style.color = color;
+        }
 
         // Season Logic
         let season = "";
