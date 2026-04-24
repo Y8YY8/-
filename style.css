@@ -447,3 +447,160 @@ header p {
     color: #94a3b8;
     font-style: italic;
 }
+
+/* Amazing Discoveries */
+.amazing-discovery {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.1), rgba(0,0,0,0));
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.amazing-discovery h3 {
+    color: var(--gradient-2);
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.discovery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.discovery-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.discovery-icon {
+    font-size: 1.8rem;
+    background: rgba(139, 92, 246, 0.1);
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.discovery-info {
+    flex: 1;
+}
+
+.discovery-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.discovery-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.3;
+}
+
+.world-changes {
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #cbd5e1;
+}
+
+.world-changes p {
+    margin-bottom: 0.5rem;
+}
+
+/* Life Timeline Section */
+.life-timeline-section {
+    background: rgba(10, 10, 12, 0.4);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.life-timeline-section h3 {
+    color: var(--primary);
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
+    text-align: center;
+}
+
+.timeline-table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.timeline-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.timeline-table th {
+    background: rgba(14, 165, 233, 0.1);
+    color: var(--primary);
+    padding: 12px;
+    text-align: left;
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+}
+
+.timeline-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    color: #e2e8f0;
+}
+
+.timeline-table tr:last-child td {
+    border-bottom: none;
+}
+
+.timeline-table tr.current-age {
+    background: rgba(14, 165, 233, 0.15);
+    border-left: 4px solid var(--primary);
+}
+
+.timeline-table tr.future-age {
+    opacity: 0.6;
+}
+
+.show-more-btn {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.show-more-btn:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+@media (max-width: 480px) {
+    .discovery-grid {
+        grid-template-columns: 1fr;
+    }
+    .discovery-card[style*="grid-column: span 2"] {
+        grid-column: span 1 !important;
+    }
+}
