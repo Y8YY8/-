@@ -23,9 +23,10 @@ body {
     background-color: var(--bg-color);
     color: var(--text-main);
     min-height: 100vh;
-    padding: 2rem 1rem;
+    padding: clamp(1rem, 5vw, 2rem) 1rem;
     position: relative;
     overflow-x: hidden;
+    width: 100%;
 }
 
 /* Background Animated Orbs */
@@ -47,16 +48,16 @@ body {
 }
 
 .orb-1 {
-    width: 400px;
-    height: 400px;
+    width: clamp(200px, 40vw, 400px);
+    height: clamp(200px, 40vw, 400px);
     background: var(--gradient-1);
     top: -100px;
     left: -100px;
 }
 
 .orb-2 {
-    width: 500px;
-    height: 500px;
+    width: clamp(250px, 50vw, 500px);
+    height: clamp(250px, 50vw, 500px);
     background: var(--gradient-2);
     bottom: -150px;
     right: -150px;
@@ -70,7 +71,7 @@ body {
     -webkit-backdrop-filter: blur(25px);
     border: 1px solid var(--border);
     border-radius: 24px;
-    padding: 3rem;
+    padding: clamp(1.5rem, 5vw, 3rem);
     width: 100%;
     max-width: 650px;
     margin: 0 auto;
@@ -92,13 +93,14 @@ header {
 }
 
 header h1 {
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 8vw, 2.8rem);
     font-weight: 800;
     background: linear-gradient(to right, #bae6fd, #0ea5e9);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
     letter-spacing: -1px;
+    line-height: 1.2;
 }
 
 header p {
@@ -184,7 +186,7 @@ header p {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
     font-weight: 700;
     color: var(--text-main);
     opacity: 0.3;
@@ -266,32 +268,34 @@ header p {
 
 .result-item {
     display: flex;
-    align-items: baseline;
-    font-size: 3.5rem;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(2.2rem, 10vw, 4rem);
     font-weight: 800;
     font-style: italic;
-    line-height: 1;
+    line-height: 1.1;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .result-number {
     color: var(--primary);
-    margin-left: 1rem;
     letter-spacing: 1px;
-    text-align: left;
+    text-align: center;
     display: inline-block;
     transition: color 0.3s ease;
 }
 
 .result-label {
     color: var(--text-main);
-    font-size: 2rem;
+    font-size: clamp(1.4rem, 6vw, 2.2rem);
 }
 
 /* Detailed Grid Stats */
 .detailed-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(120px, 45%, 1fr), 1fr));
+    gap: 0.75rem;
     margin-top: 1rem;
 }
 
@@ -359,13 +363,18 @@ header p {
 }
 
 @media (max-width: 640px) {
-    .calculator-container {
-        padding: 2rem 1.5rem;
+    .detailed-stats {
+        grid-template-columns: repeat(2, 1fr);
     }
-    
-    .result-item { font-size: 2.8rem; }
-    .result-label { font-size: 1.6rem; }
-    .detailed-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 400px) {
+    .detailed-stats {
+        grid-template-columns: 1fr;
+    }
+    .picker-label {
+        font-size: 0.75rem;
+    }
 }
 
 /* Life Countdown Section */
@@ -410,11 +419,12 @@ header p {
 }
 
 .countdown-timer {
-    font-size: 1.8rem;
+    font-size: clamp(1.2rem, 6vw, 2rem);
     font-family: monospace;
     color: #fca5a5;
     font-weight: 800;
     margin-bottom: 0.5rem;
+    word-break: break-all;
 }
 
 .life-note {

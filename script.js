@@ -79,17 +79,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let isValid = true;
         const now = new Date();
 
-        const dateList = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-        if (y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0)) {
-            dateList[1] = 29;
-        }
+        const inputDate = new Date(y, m - 1, d);
+        const getDaysInMonth = (month, year) => new Date(year, month, 0).getDate();
 
-        if (d > dateList[m - 1]) {
-            showError(`شهر ${m} لا يحتوي على ${d} أيام`);
+        if (d > getDaysInMonth(m, y)) {
+            showError(`شهر ${m} عام ${y} لا يحتوي على ${d} أيام`);
             isValid = false;
         }
 
-        const inputDate = new Date(y, m - 1, d);
         if (inputDate > now) {
             showError('لا يمكن إدخال تاريخ في المستقبل');
             isValid = false;
@@ -100,15 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsSection.style.display = 'flex';
 
         // Base Age Calculation
-        let ageY = currentYear - y;
-        let ageM = now.getMonth() + 1 - m;
-        let ageD = now.getDate() - d;
+        let ageY = now.getFullYear() - inputDate.getFullYear();
+        let ageM = now.getMonth() - inputDate.getMonth();
+        let ageD = now.getDate() - inputDate.getDate();
 
         if (ageD < 0) {
             ageM -= 1;
-            let prevMonth = now.getMonth();
-            if (prevMonth === 0) prevMonth = 12;
-            ageD += dateList[prevMonth - 1];
+            // Borrow days from the previous month of current date
+            ageD += getDaysInMonth(now.getMonth(), now.getFullYear());
         }
 
         if (ageM < 0) {
