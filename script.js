@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
             gainNode.connect(audioCtx.destination);
             
             osc.type = 'triangle';
-            // Crisp, premium click sound
             osc.frequency.setValueAtTime(800, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
             
@@ -83,12 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const getDaysInMonth = (month, year) => new Date(year, month, 0).getDate();
 
         if (d > getDaysInMonth(m, y)) {
-            showError(`شهر ${m} عام ${y} لا يحتوي على ${d} أيام`);
+            showError(`Month ${m} of ${y} does not have ${d} days`);
             isValid = false;
         }
 
         if (inputDate > now) {
-            showError('لا يمكن إدخال تاريخ في المستقبل');
+            showError('Date cannot be in the future');
             isValid = false;
         }
 
@@ -103,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (ageD < 0) {
             ageM -= 1;
-            // Borrow days from the previous month of current date
             ageD += getDaysInMonth(now.getMonth(), now.getFullYear());
         }
 
@@ -118,8 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
         animateValue(document.getElementById('result-days'), 0, ageD, 1500);
 
         // Day of Week
-        const daysAr = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-        document.getElementById('born-day').textContent = daysAr[inputDate.getDay()];
+        const daysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        document.getElementById('born-day').textContent = daysEn[inputDate.getDay()];
+
+        // Zodiac Sign
+        document.getElementById('zodiac-sign').innerHTML = getZodiacSign(m, d);
 
         // Moon Phase Calculation
         document.getElementById('moon-phase').innerHTML = getMoonPhase(y, m, d);
@@ -128,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const diffDays = (now - inputDate) / (1000 * 60 * 60 * 24);
         const hijriYears = Math.floor(diffDays / 354.36708);
         const hijriMonths = Math.floor((diffDays % 354.36708) / 29.53059);
-        document.getElementById('hijri-age').textContent = `${hijriYears} سنة و ${hijriMonths} شهر`;
+        document.getElementById('hijri-age').textContent = `${hijriYears} years and ${hijriMonths} months`;
 
         // Facts Data
         updateFacts(ageY, inputDate);
@@ -183,8 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (remainingMs > 0) {
             const lifePct = (diffMs / lifeTotalMs) * 100;
             document.getElementById('life-progress').style.width = `${lifePct}%`;
-            document.getElementById('lived-time').textContent = `عشت: ${Math.floor(lifePct)}%`;
-            document.getElementById('remaining-time').textContent = `متبقي: ${Math.floor(100 - lifePct)}%`;
+            document.getElementById('lived-time').textContent = `Lived: ${Math.floor(lifePct)}%`;
+            document.getElementById('remaining-time').textContent = `Remaining: ${Math.floor(100 - lifePct)}%`;
             
             const rDays = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
             const rHours = Math.floor((remainingMs / (1000 * 60 * 60)) % 24);
@@ -192,66 +193,84 @@ document.addEventListener('DOMContentLoaded', () => {
             const rSecs = Math.floor((remainingMs / 1000) % 60);
             
             document.getElementById('life-countdown-timer').textContent = 
-                `${rDays} يوم : ${String(rHours).padStart(2,'0')} : ${String(rMins).padStart(2,'0')} : ${String(rSecs).padStart(2,'0')}`;
+                `${rDays}d : ${String(rHours).padStart(2,'0')}h : ${String(rMins).padStart(2,'0')}m : ${String(rSecs).padStart(2,'0')}s`;
         } else {
             document.getElementById('life-progress').style.width = '100%';
-            document.getElementById('lived-time').textContent = `عشت: 100%`;
-            document.getElementById('remaining-time').textContent = `متبقي: 0%`;
-            document.getElementById('life-countdown-timer').textContent = "تهانينا! لقد تجاوزت متوسط العمر.";
+            document.getElementById('lived-time').textContent = `Lived: 100%`;
+            document.getElementById('remaining-time').textContent = `Remaining: 0%`;
+            document.getElementById('life-countdown-timer').textContent = "Congratulations! You exceeded the average lifespan.";
             document.getElementById('life-countdown-timer').style.fontSize = "1.2rem";
         }
+
+        // Next Birthday Countdown
+        let nextBday = new Date(now.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+        if (nextBday < now) {
+            nextBday.setFullYear(now.getFullYear() + 1);
+        }
+
+        const nextBdayDateStr = nextBday.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('next-birthday-date').textContent = nextBdayDateStr;
+
+        const nextBdayMs = nextBday - now;
+        const nbDays = Math.floor(nextBdayMs / (1000 * 60 * 60 * 24));
+        const nbHours = Math.floor((nextBdayMs / (1000 * 60 * 60)) % 24);
+        const nbMins = Math.floor((nextBdayMs / (1000 * 60)) % 60);
+        const nbSecs = Math.floor((nextBdayMs / 1000) % 60);
+
+        document.getElementById('next-birthday-countdown').textContent =
+            `${nbDays}d : ${String(nbHours).padStart(2,'0')}h : ${String(nbMins).padStart(2,'0')}m : ${String(nbSecs).padStart(2,'0')}s`;
     }
 
     function formatNumber(num) {
-        return num.toLocaleString('en-US'); // For commas
+        return num.toLocaleString('en-US');
     }
 
     const historicalEvents = {
-        1980: "تم إطلاق لعبة باكمان (Pac-Man) الشهيرة.",
-        1981: "إطلاق أول كمبيوتر شخصي من شركة IBM.",
-        1982: "إطلاق أول قرص مضغوط تجاري (CD).",
-        1983: "ميلاد شبكة الإنترنت بشكله الحالي واعتماد بروتوكول TCP/IP.",
-        1984: "إطلاق كمبيوتر ماكنتوش الأول من أبل.",
-        1985: "إصدار أول نسخة من نظام التشغيل ويندوز.",
-        1986: "كارثة مفاعل تشيرنوبل النووي.",
-        1987: "وصول عدد سكان العالم إلى 5 مليارات نسمة.",
-        1988: "إنجاز أول كابل ألياف بصرية عبر المحيط الأطلسي.",
-        1989: "سقوط جدار برلين وتغيير خريطة العالم.",
-        1990: "تم إطلاق تلسكوب هابل الفضائي.",
-        1991: "ظهور أول موقع ويب على شبكة الإنترنت (WWW).",
-        1992: "إرسال أول رسالة نصية قصيرة (SMS) في التاريخ.",
-        1993: "إطلاق معالج بنتيوم من إنتل.",
-        1994: "إطلاق جهاز بلايستيشن الأول.",
-        1995: "إطلاق نظام التشغيل ويندوز 95 وظهور جافاسكريبت.",
-        1996: "استنساخ النعجة دوللي بنجاح.",
-        1997: "هزيمة بطل العالم في الشطرنج أمام حاسوب ديب بلو.",
-        1998: "تأسيس شركة محرك البحث جوجل (Google).",
-        1999: "تجاوز سكان العالم 6 مليارات نسمة.",
-        2000: "دخول الألفية الثالثة بسلام متجاوزين أزمة Y2K.",
-        2001: "إطلاق موسوعة ويكيبيديا وإطلاق أول جهاز آيبود.",
-        2002: "إطلاق عملة اليورو للتداول المادي.",
-        2003: "إكمال مشروع الجينوم البشري بنجاح.",
-        2004: "تأسيس موقع التواصل الاجتماعي فيسبوك.",
-        2005: "تأسيس وإطلاق موقع الفيديو الأول يوتيوب.",
-        2006: "إطلاق موقع التدوين المصغر تويتر (Twitter).",
-        2007: "الإعلان عن أول هاتف ذكي آيفون (iPhone).",
-        2008: "إطلاق مصادم الهادرونات الكبير، أضخم تجربة علمية.",
-        2009: "إطلاق أول عملة رقمية مشفرة، البيتكوين.",
-        2010: "إطلاق تطبيق إنستغرام لتبادل الصور.",
-        2011: "إرسال روبوت كيوريوسيتي إلى المريخ.",
-        2012: "اكتشاف بوزون هيغز، الجسيم الملقب بجسيم الإله.",
-        2013: "إطلاق جهاز ألعاب بلايستيشن 4.",
-        2014: "هبوط أول مسبار بشري على سطح مذنب (المسبار فيلة).",
-        2015: "اكتشاف أدلة على وجود ماء سائل على سطح المريخ.",
-        2016: "هوس عالمي بظهور وإطلاق لعبة بوكيمون جو.",
-        2017: "اكتشاف نظام كوكبي يحتوي على كواكب تشبه الأرض.",
-        2018: "إطلاق سيارة تيسلا رودستر إلى الفضاء.",
-        2019: "التقاط ونشر أول صورة حقيقية لثقب أسود في التاريخ.",
-        2020: "انتشار جائحة كوفيد-19 وبداية عصر العمل عن بعد.",
-        2021: "إطلاق تلسكوب جيمس ويب الفضائي الأقوى في التاريخ.",
-        2022: "وصول عدد سكان كوكب الأرض رسمياً إلى 8 مليارات إنسان.",
-        2023: "الانتشار المذهل للذكاء الاصطناعي التوليدي مثل ChatGPT.",
-        2024: "تقدم مذهل في الذكاء الاصطناعي وبدء عصر الحوسبة المكانية."
+        1980: "Pac-Man was released, becoming a global phenomenon.",
+        1981: "The first IBM PC was launched, revolutionizing personal computing.",
+        1982: "The first commercial Compact Disc (CD) was released.",
+        1983: "The Internet was born as ARPANET officially switched to TCP/IP.",
+        1984: "Apple launched the first Macintosh computer.",
+        1985: "Microsoft released the first version of Windows.",
+        1986: "The Chernobyl nuclear disaster occurred in Ukraine.",
+        1987: "The world population reached 5 billion people.",
+        1988: "The first transatlantic fiber optic cable was completed.",
+        1989: "The Berlin Wall fell, signaling the end of the Cold War.",
+        1990: "The Hubble Space Telescope was launched into orbit.",
+        1991: "The first website went live on the World Wide Web (WWW).",
+        1992: "The first SMS (text message) was sent in history.",
+        1993: "Intel released the first Pentium processor.",
+        1994: "Sony launched the first PlayStation in Japan.",
+        1995: "Windows 95 was released and JavaScript was born.",
+        1996: "Dolly the Sheep became the first mammal cloned from an adult cell.",
+        1997: "Deep Blue became the first computer to beat a world chess champion.",
+        1998: "Google was founded by Larry Page and Sergey Brin.",
+        1999: "The world population reached 6 billion people.",
+        2000: "The world entered the new millennium, surviving the Y2K bug.",
+        2001: "Wikipedia was launched and the first iPod was released.",
+        2002: "The Euro was officially introduced as a physical currency.",
+        2003: "The Human Genome Project was successfully completed.",
+        2004: "Facebook was founded by Mark Zuckerberg at Harvard.",
+        2005: "YouTube was founded and the first video was uploaded.",
+        2006: "Twitter was launched, introducing microblogging to the world.",
+        2007: "Apple announced the first iPhone, changing the world forever.",
+        2008: "The Large Hadron Collider, the world's largest scientific experiment, was launched.",
+        2009: "The first cryptocurrency, Bitcoin, was launched.",
+        2010: "Instagram was launched as a photo-sharing app.",
+        2011: "NASA's Curiosity rover was sent to explore Mars.",
+        2012: "The Higgs Boson particle was discovered at CERN.",
+        2013: "Sony launched the PlayStation 4.",
+        2014: "The Philae probe made the first landing on a comet.",
+        2015: "Evidence of liquid water on Mars was discovered.",
+        2016: "Pokémon GO was released, creating a global AR craze.",
+        2017: "The TRAPPIST-1 system with seven Earth-sized planets was discovered.",
+        2018: "SpaceX launched a Tesla Roadster into deep space.",
+        2019: "The first-ever real image of a black hole was captured and published.",
+        2020: "The COVID-19 pandemic began, changing how the world works.",
+        2021: "The James Webb Space Telescope, the most powerful ever, was launched.",
+        2022: "The world population officially reached 8 billion people.",
+        2023: "Generative AI like ChatGPT exploded in popularity and capability.",
+        2024: "Advancements in AI continue to accelerate into the era of spatial computing."
     };
 
     function updateFacts(ageY, birthDate) {
@@ -267,114 +286,143 @@ document.addEventListener('DOMContentLoaded', () => {
         else pct = 93 + (ageY - 70) * 0.3;
         pct = Math.min(pct, 99.9).toFixed(1);
 
-        document.getElementById('fact-demographic').innerHTML = `أنت أقدم في هذا العالم من حوالي <span class="highlight">${pct}%</span> من إجمالي سكان الأرض حالياً!`;
+        document.getElementById('fact-demographic').innerHTML = `You are older than approximately <span class="highlight">${pct}%</span> of the world's population!`;
 
         const worldPop = 8100000000;
         const youngerPeople = Math.floor(worldPop * (pct / 100));
         const youngerFormatted = youngerPeople.toLocaleString('en-US');
-        document.getElementById('fact-population').innerHTML = `يوجد تقريباً <span class="highlight">${youngerFormatted}</span> شخص أصغر منك على كوكب الأرض اليوم!`;
+        document.getElementById('fact-population').innerHTML = `There are approximately <span class="highlight">${youngerFormatted}</span> people younger than you on Earth today!`;
 
         let historyStr = historicalEvents[birthYear];
         if (!historyStr) {
-            if (birthYear < 1980) historyStr = "لقد عاصرت بدايات التحول التكنولوجي العظيم والتطور الرقمي المذهل!";
-            else historyStr = "في السنة التي ولدت فيها كانت هناك أحداث وتغيرات كبيرة ترسم المستقبل!";
+            if (birthYear < 1980) historyStr = "You have lived through the greatest technological transformation in history!";
+            else historyStr = "Major events were shaping the future during the year you were born!";
         }
-        document.getElementById('fact-historical').innerHTML = `في سنة ميلادك (${birthYear}): <span class="highlight">${historyStr}</span>`;
+        document.getElementById('fact-historical').innerHTML = `In the year you were born (${birthYear}): <span class="highlight">${historyStr}</span>`;
 
         const worldCups = [1930, 1934, 1938, 1950, 1954, 1958, 1962, 1966, 1970, 1974, 1978, 1982, 1986, 1990, 1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022, 2026];
         const presidents = [1901, 1909, 1913, 1921, 1923, 1929, 1933, 1945, 1953, 1961, 1963, 1969, 1974, 1977, 1981, 1989, 1993, 2001, 2009, 2017, 2021, 2025];
         
         const wcCount = worldCups.filter(year => year >= birthYear && year <= new Date().getFullYear()).length;
         const presCount = presidents.filter(year => year >= birthYear && year <= new Date().getFullYear()).length + 1;
-        document.getElementById('fact-world').innerHTML = `🏆 لقد عاصرت <span class="highlight">${wcCount}</span> من بطولات كأس العالم، ومر عليك <span class="highlight">${presCount}</span> من رؤساء القوى العظمى!`;
+        document.getElementById('fact-world').innerHTML = `🏆 You've witnessed <span class="highlight">${wcCount}</span> World Cups and <span class="highlight">${presCount}</span> U.S. Presidential terms!`;
 
-        const daysAr = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-        const dayName = daysAr[birthDate.getDay()];
+        const daysEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayName = daysEn[birthDate.getDay()];
         let dayFact = "";
         
         const seed = birthMonth * 31 + birthDay;
         const flavors = [
-            "يقال أن الأشخاص المولودين في هذا اليوم يمتلكون طاقة إيجابية عالية.",
-            "في مثل هذا اليوم من كل عام، تدور الأرض في نفس الموضع تقريباً من دورتها حول الشمس.",
-            "مواليد هذا اليوم يتميزون غالباً بالإبداع والنظرة الفريدة للأمور.",
-            "هل تعلم أن العديد من العظماء والقادة شاركوك نفس يوم الميلاد عبر التاريخ؟",
-            "هذا اليوم يمثل لك نقطة الانطلاق في رحلة الحياة المثيرة."
+            "People born on this day are often said to possess high positive energy.",
+            "Every year on this day, the Earth is in roughly the same position in its orbit around the Sun.",
+            "Those born today are often characterized by creativity and a unique perspective.",
+            "Many great leaders and visionaries have shared your birthday throughout history.",
+            "This day marks your personal starting point in the exciting journey of life."
         ];
         
-        if (birthMonth === 0 && birthDay === 1) dayFact = "لقد ولدت في أول يوم من السنة! يا لها من بداية مميزة.";
-        else if (birthMonth === 1 && birthDay === 29) dayFact = "أنت من النادرين الذين ولدوا في السنة الكبيسة، يوم ميلادك يأتي مرة كل 4 سنوات!";
-        else dayFact = `لقد ولدت في يوم <span class="highlight">${dayName}</span>، ` + flavors[seed % flavors.length];
+        if (birthMonth === 0 && birthDay === 1) dayFact = "You were born on New Year's Day! What a brilliant start.";
+        else if (birthMonth === 1 && birthDay === 29) dayFact = "You are one of the rare individuals born on a Leap Day! Your birthday only comes once every 4 years.";
+        else dayFact = `You were born on a <span class="highlight">${dayName}</span>, and ` + flavors[seed % flavors.length];
 
         document.getElementById('fact-day').innerHTML = dayFact;
 
         // Billion Seconds
         const billionMs = birthDate.getTime() + 1000000000000;
-        const billionDateStr = new Date(billionMs).toLocaleDateString('ar-EG', {year: 'numeric', month: 'long', day: 'numeric'});
+        const billionDateStr = new Date(billionMs).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'});
         if (billionMs > new Date().getTime()) {
-            document.getElementById('fact-billion').innerHTML = `⏳ ستكمل <span class="highlight">مليار ثانية</span> من عمرك في تاريخ: ${billionDateStr}! جهز نفسك للاحتفال.`;
+            document.getElementById('fact-billion').innerHTML = `⏳ You will complete <span class="highlight">one billion seconds</span> of life on: ${billionDateStr}! Get ready to celebrate.`;
         } else {
-            document.getElementById('fact-billion').innerHTML = `⏳ لقد أكملت <span class="highlight">مليار ثانية</span> من عمرك في تاريخ: ${billionDateStr}!`;
+            document.getElementById('fact-billion').innerHTML = `⏳ You completed <span class="highlight">one billion seconds</span> of life on: ${billionDateStr}!`;
         }
 
         // Tech Comparisons
         let techFactStr = "";
         if (birthYear <= 1983) {
-            techFactStr = `😲 أنت أقدم من <span class="highlight">شبكة الإنترنت (Internet)</span> بأكملها! لقد عاصرت العالم قبل أن يكون متصلاً بالشاشات.`;
+            techFactStr = `😲 You are older than the <span class="highlight">Internet</span> itself! You've seen the world before it was connected by screens.`;
         } else if (birthYear <= 1991) {
-            techFactStr = `😲 أنت أقدم من <span class="highlight">شبكة الويب العالمية (WWW)</span>! لقد رأيت التكنولوجيا في مهدها قبل أن تغير شكل العالم.`;
+            techFactStr = `😲 You are older than the <span class="highlight">World Wide Web</span>! You saw technology in its infancy before it changed everything.`;
         } else if (birthYear <= 1998) {
-            techFactStr = `🔍 أنت أقدم من <span class="highlight">محرك بحث جوجل (Google)</span>! لقد عشت في زمن كانت فيه المعرفة تُستخرج بصعوبة من الكتب والمكتبات.`;
+            techFactStr = `🔍 You are older than <span class="highlight">Google</span>! You lived in a time when knowledge was sought in libraries and books.`;
         } else if (birthYear <= 2004) {
-            techFactStr = `🌐 أنت أقدم من <span class="highlight">موقع فيسبوك ويوتيوب</span>! لقد عاصرت الأيام الأولى الهادئة قبل ولادة ضجيج وسائل التواصل الاجتماعي.`;
+            techFactStr = `🌐 You are older than <span class="highlight">Facebook and YouTube</span>! You experienced the quiet days before the social media boom.`;
         } else if (birthYear <= 2007) {
-            techFactStr = `📱 أنت أقدم من <span class="highlight">أول هاتف آيفون (iPhone)</span>! لقد كنت موجوداً قبل أن تغزو الهواتف الذكية الحديثة جيوبنا وتغير حياتنا.`;
+            techFactStr = `📱 You are older than the <span class="highlight">iPhone</span>! You existed before smartphones invaded our pockets and lives.`;
         } else if (birthYear <= 2010) {
-            techFactStr = `📸 أنت أقدم من <span class="highlight">تطبيق إنستغرام وواتساب</span>! لكنك تعتبر من الجيل الذي فتح عينيه مع بداية ثورة الهواتف الذكية الحقيقية.`;
+            techFactStr = `📸 You are older than <span class="highlight">Instagram and WhatsApp</span>! But you belong to the generation that grew up with the mobile revolution.`;
         } else if (birthYear <= 2016) {
-            techFactStr = `🎵 أنت أقدم من <span class="highlight">تطبيق تيك توك (TikTok)</span>! نشأت في عالم حيث الإنترنت والهواتف جزء أساسي لا يتجزأ من الحياة.`;
+            techFactStr = `🎵 You are older than <span class="highlight">TikTok</span>! You were raised in a world where the internet was already a part of life.`;
         } else {
-            techFactStr = `🤖 لقد ولدت في قلب عصر <span class="highlight">الذكاء الاصطناعي</span> والتكنولوجيا الفائقة! أنت أصغر سناً من معظم التقنيات والتطبيقات التي نستخدمها اليوم.`;
+            techFactStr = `🤖 You were born in the heart of the <span class="highlight">AI era</span>! You are younger than most of the technologies we use today.`;
         }
         document.getElementById('fact-tech').innerHTML = techFactStr;
 
         const celebKey = `${birthMonth + 1}-${birthDay}`;
         const celebrityBirthdays = {
-            "1-1": "العالم الفيزيائي ساتيندرا ناث بوز", "1-15": "مارتن لوثر كينغ الابن", "1-17": "محمد علي كلاي",
-            "2-4": "روزا باركس", "2-5": "كريستيانو رونالدو", "2-11": "توماس إديسون مخترع المصباح", "2-15": "غاليليو غاليلي",
-            "2-24": "ستيف جوبز مؤسس أبل", "3-14": "ألبرت أينشتاين", "4-15": "ليوناردو دا فينشي",
-            "4-25": "جولييلمو ماركوني مخترع الراديو", "5-6": "سيغموند فرويد", "5-14": "مارك زوكربيرغ",
-            "6-24": "ليونيل ميسي", "6-28": "إيلون ماسك", "7-1": "الأميرة ديانا", "7-18": "نيلسون مانديلا",
-            "8-4": "باراك أوباما", "8-30": "وارن بافيت", "10-28": "بيل غيتس", "11-7": "ماري كوري",
-            "12-25": "إسحاق نيوتن", "12-30": "ليبرون جيمس"
+            "1-1": "Physicist Satyendra Nath Bose", "1-15": "Martin Luther King Jr.", "1-17": "Muhammad Ali",
+            "2-4": "Rosa Parks", "2-5": "Cristiano Ronaldo", "2-11": "Thomas Edison", "2-15": "Galileo Galilei",
+            "2-24": "Steve Jobs", "3-14": "Albert Einstein", "4-15": "Leonardo da Vinci",
+            "4-25": "Guglielmo Marconi", "5-6": "Sigmund Freud", "5-14": "Mark Zuckerberg",
+            "6-24": "Lionel Messi", "6-28": "Elon Musk", "7-1": "Princess Diana", "7-18": "Nelson Mandela",
+            "8-4": "Barack Obama", "8-30": "Warren Buffett", "10-28": "Bill Gates", "11-7": "Marie Curie",
+            "12-25": "Isaac Newton", "12-30": "LeBron James"
         };
 
         const exactAgeCelebs = {
-            10: "رعايتك أصبحت أهم من أي وقت مضى", 12: "بداية المراهقة", 15: "الممثلة ماكينا جريس", 16: "الممثل جيكوب تريمبلاي",
-            18: "اللاعبة سكاي براون", 20: "ألمع نجوم الجيل الجديد", 21: "الممثل نوح شناب", 22: "الممثلة ميلي بوبي براون",
-            23: "المغنية أوليفيا رودريغو", 24: "الممثلة جينا أورتيجا", 25: "المغنية بيلي إيليش", 26: "إرلينغ هالاند",
-            27: "كيليان مبابي", 28: "اليوتيوبر مستر بيست", 29: "المغنية روزي (بلاك بينك)", 30: "زيندايا وتوم هولاند",
-            31: "دوا ليبا", 32: "جاستن بيبر", 33: "أريانا غراندي", 34: "سيلينا غوميز و نيمار", 35: "إد شيران",
-            36: "تايلور سويفت", 37: "أديل", 38: "ريانا", 39: "ليونيل ميسي", 40: "دريك", 41: "كريستيانو رونالدو",
-            42: "مارك زوكربيرغ", 43: "كريس هيمسوورث", 44: "الأمير ويليام", 45: "كيم كارداشيان", 46: "ريان غوسلينغ",
-            47: "كيفن هارت", 48: "كاني ويست", 49: "توم هاردي", 50: "سيليان مورفي", 51: "ديفيد بيكهام",
-            52: "ليوناردو دي كابريو", 53: "إيمينيم", 54: "دوين جونسون (ذا روك)", 55: "إيلون ماسك", 56: "مات ديمون",
-            57: "ويل سميث", 58: "هيو جاكمان", 59: "فين ديزل", 60: "مايك تايسون", 61: "روبرت داوني جونيور",
-            62: "براد بيت", 63: "جوني ديب", 64: "توم كروز", 65: "جورج كلوني"
+            10: "Care is more important now than ever", 12: "Beginning of adolescence", 15: "Actress Mckenna Grace", 16: "Actor Jacob Tremblay",
+            18: "Skateboarder Sky Brown", 20: "Brightest stars of the new generation", 21: "Actor Noah Schnapp", 22: "Actress Millie Bobby Brown",
+            23: "Singer Olivia Rodrigo", 24: "Actress Jenna Ortega", 25: "Singer Billie Eilish", 26: "Erling Haaland",
+            27: "Kylian Mbappé", 28: "YouTuber MrBeast", 29: "Singer Rosé (Blackpink)", 30: "Zendaya and Tom Holland",
+            31: "Dua Lipa", 32: "Justin Bieber", 33: "Ariana Grande", 34: "Selena Gomez and Neymar", 35: "Ed Sheeran",
+            36: "Taylor Swift", 37: "Adele", 38: "Rihanna", 39: "Lionel Messi", 40: "Drake", 41: "Cristiano Ronaldo",
+            42: "Mark Zuckerberg", 43: "Chris Hemsworth", 44: "Prince William", 45: "Kim Kardashian", 46: "Ryan Gosling",
+            47: "Kevin Hart", 48: "Kanye West", 49: "Tom Hardy", 50: "Cillian Murphy", 51: "David Beckham",
+            52: "Leonardo DiCaprio", 53: "Eminem", 54: "Dwayne Johnson (The Rock)", 55: "Elon Musk", 56: "Matt Damon",
+            57: "Will Smith", 58: "Hugh Jackman", 59: "Vin Diesel", 60: "Mike Tyson", 61: "Robert Downey Jr.",
+            62: "Brad Pitt", 63: "Johnny Depp", 64: "Tom Cruise", 65: "George Clooney"
         };
 
         if (celebrityBirthdays[celebKey]) {
-            document.getElementById('fact-celebrity').innerHTML = `🌟 يا للصدفة! أنت تشارك يوم ميلادك مع <span class="highlight">${celebrityBirthdays[celebKey]}</span>.`;
+            document.getElementById('fact-celebrity').innerHTML = `🌟 What a coincidence! You share your birthday with <span class="highlight">${celebrityBirthdays[celebKey]}</span>.`;
         } else {
             let celebStr = exactAgeCelebs[ageY];
             if (!celebStr) {
                 let closest = 30;
                 for(let a in exactAgeCelebs) {
-                    if (a <= ageY) closest = a;
+                    if (parseInt(a) <= ageY) closest = a;
                 }
                 celebStr = exactAgeCelebs[closest];
             }
-            document.getElementById('fact-celebrity').innerHTML = `🧑🤝🧑 أنت الآن بنفس عمر <span class="highlight">${celebStr}</span>!`;
+            document.getElementById('fact-celebrity').innerHTML = `🧑🤝🧑 You are now the same age as <span class="highlight">${celebStr}</span>!`;
         }
+    }
+
+    function getZodiacSign(month, day) {
+        const zodiacSigns = [
+            { name: "Capricorn", emoji: "♑", start: [12, 22], end: [1, 19], desc: "Practical, ambitious, and disciplined. You are a natural leader who values hard work and long-term goals." },
+            { name: "Aquarius", emoji: "♒", start: [1, 20], end: [2, 18], desc: "Innovative, progressive, and independent. You are a visionary who loves to think outside the box." },
+            { name: "Pisces", emoji: "♓", start: [2, 19], end: [3, 20], desc: "Compassionate, artistic, and intuitive. You have a deep emotional understanding of the world around you." },
+            { name: "Aries", emoji: "♈", start: [3, 21], end: [4, 19], desc: "Bold, ambitious, and energetic. You are a pioneer who loves to take on new challenges with courage." },
+            { name: "Taurus", emoji: "♉", start: [4, 20], end: [5, 20], desc: "Reliable, patient, and practical. You value stability and appreciate the finer things in life." },
+            { name: "Gemini", emoji: "♊", start: [5, 21], end: [6, 20], desc: "Adaptable, outgoing, and intelligent. You are a great communicator who is always curious about the world." },
+            { name: "Cancer", emoji: "♋", start: [6, 21], end: [7, 22], desc: "Nurturing, intuitive, and protective. You have a strong connection to your home and loved ones." },
+            { name: "Leo", emoji: "♌", start: [7, 23], end: [8, 22], desc: "Confident, charismatic, and generous. You are a natural-born leader who loves to be in the spotlight." },
+            { name: "Virgo", emoji: "♍", start: [8, 23], end: [9, 22], desc: "Analytical, organized, and kind. You have a sharp eye for detail and love to be of service to others." },
+            { name: "Libra", emoji: "♎", start: [9, 23], end: [10, 22], desc: "Diplomatic, fair, and social. You value harmony and strive to find balance in all areas of life." },
+            { name: "Scorpio", emoji: "♏", start: [10, 23], end: [11, 21], desc: "Passionate, resourceful, and brave. You have a powerful presence and a deep sense of loyalty." },
+            { name: "Sagittarius", emoji: "♐", start: [11, 22], end: [12, 21], desc: "Optimistic, adventurous, and philosophical. You love to explore new ideas and travel the world." }
+        ];
+
+        let sign = zodiacSigns.find(s => {
+            const [sM, sD] = s.start;
+            const [eM, eD] = s.end;
+            if (sM === 12 && month === 12 && day >= sD) return true;
+            if (sM === 12 && month === 1 && day <= eD) return true;
+            return (month === sM && day >= sD) || (month === eM && day <= eD);
+        });
+
+        if (!sign) sign = zodiacSigns[0]; // Fallback to Capricorn
+
+        return `<span style="color:var(--primary)">${sign.emoji} ${sign.name}</span><br><p style="font-size:0.85rem; font-weight:400; margin-top:5px; color:var(--text-muted)">${sign.desc}</p>`;
     }
 
     function getMoonPhase(year, month, day) {
@@ -394,14 +442,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (b >= 8) b = 0;
         
         const phases = [
-            { name: "محاق", emoji: "🌑" },
-            { name: "هلال متزايد", emoji: "🌒" },
-            { name: "تربيع أول", emoji: "🌓" },
-            { name: "أحدب متزايد", emoji: "🌔" },
-            { name: "بدر", emoji: "🌕" },
-            { name: "أحدب متناقص", emoji: "🌖" },
-            { name: "تربيع ثاني", emoji: "🌗" },
-            { name: "هلال متناقص", emoji: "🌘" }
+            { name: "New Moon", emoji: "🌑" },
+            { name: "Waxing Crescent", emoji: "🌒" },
+            { name: "First Quarter", emoji: "🌓" },
+            { name: "Waxing Gibbous", emoji: "🌔" },
+            { name: "Full Moon", emoji: "🌕" },
+            { name: "Waning Gibbous", emoji: "🌖" },
+            { name: "Last Quarter", emoji: "🌗" },
+            { name: "Waning Crescent", emoji: "🌘" }
         ];
         return `${phases[b].emoji} ${phases[b].name}`;
     }
@@ -456,7 +504,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Play sound if active index changes
             if (newActiveIndex !== -1 && lastActiveIndex !== -1 && newActiveIndex !== lastActiveIndex) {
                 playTick();
             }
@@ -469,13 +516,12 @@ document.addEventListener('DOMContentLoaded', () => {
             window.requestAnimationFrame(updateActive);
         });
 
-        // Mouse Drag Logic
         let isDown = false;
         let startY;
         let scrollTop;
 
         viewport.addEventListener('mousedown', (e) => {
-            initAudio(); // ensure audio initialized
+            initAudio();
             isDown = true;
             viewport.style.cursor = 'grabbing';
             viewport.style.scrollSnapType = 'none';
