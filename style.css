@@ -19,7 +19,7 @@
 }
 
 body {
-    font-family: 'Tajawal', sans-serif;
+    font-family: 'Inter', 'Tajawal', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
     min-height: 100vh;
@@ -324,7 +324,7 @@ header p {
     font-size: 1.4rem;
     font-weight: 800;
     color: #e2e8f0;
-    font-family: monospace; /* Great for numbers ticking */
+    font-family: 'Inter', monospace; /* Great for numbers ticking */
 }
 
 #born-day {
@@ -420,7 +420,7 @@ header p {
 
 .countdown-timer {
     font-size: clamp(1.2rem, 6vw, 2rem);
-    font-family: monospace;
+    font-family: 'Inter', monospace;
     color: #fca5a5;
     font-weight: 800;
     margin-bottom: 0.5rem;
