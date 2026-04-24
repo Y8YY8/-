@@ -791,4 +791,27 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         window.requestAnimationFrame(step);
     }
+
+    // SEO Toggle Initialization
+    initSEOToggle();
+
+    function initSEOToggle() {
+        const toggleBtn = document.getElementById('seo-toggle');
+        const content = document.getElementById('seo-content');
+
+        if (toggleBtn && content) {
+            toggleBtn.addEventListener('click', () => {
+                const isActive = content.classList.toggle('active');
+                toggleBtn.classList.toggle('active');
+
+                const btnSpan = toggleBtn.querySelector('span');
+                if (isActive) {
+                    btnSpan.textContent = 'Show Less';
+                    content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    btnSpan.textContent = 'Learn More About AI Time Precision';
+                }
+            });
+        }
+    }
 });

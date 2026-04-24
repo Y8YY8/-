@@ -103,18 +103,6 @@ header h1 {
     line-height: 1.2;
 }
 
-.logo-wrapper {
-    margin-bottom: 1.5rem;
-}
-
-.site-logo {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
-}
 
 .visually-hidden {
     position: absolute;
@@ -680,13 +668,51 @@ header p {
 }
 
 /* SEO Content Styles */
-.seo-content {
+.seo-container {
     margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.seo-toggle {
+    width: 100%;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.seo-toggle:hover {
+    background: rgba(14, 165, 233, 0.1);
+    border-color: var(--primary);
+}
+
+.toggle-icon {
+    transition: transform 0.3s ease;
+}
+
+.seo-toggle.active .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.seo-content {
+    display: none; /* Hidden by default */
     flex-direction: column;
     gap: 2.5rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
+    padding: 1rem 0;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.seo-content.active {
+    display: flex;
 }
 
 .seo-content h2 {
@@ -702,10 +728,16 @@ header p {
     margin-bottom: 0.5rem;
 }
 
-.about-section p {
+.about-section p, .detailed-article p {
     line-height: 1.7;
     color: #cbd5e1;
     font-size: 1.05rem;
+    margin-bottom: 1rem;
+}
+
+.detailed-article {
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
 }
 
 .features-grid {
@@ -748,6 +780,37 @@ header p {
     color: #94a3b8;
     line-height: 1.6;
     font-size: 0.95rem;
+}
+
+.how-to-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.how-to-section ol {
+    padding-left: 1.5rem;
+    color: #cbd5e1;
+    line-height: 1.8;
+}
+
+.how-to-section li {
+    margin-bottom: 0.8rem;
+}
+
+.how-to-section li strong {
+    color: var(--primary);
+}
+
+.final-note {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: rgba(14, 165, 233, 0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(14, 165, 233, 0.1);
+    text-align: center;
+    font-style: italic;
+    color: #94a3b8;
 }
 
 .site-footer {
