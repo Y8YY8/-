@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="حاسبة العمر الذكية الفاخرة">
+    <title>حاسبة العمر الذكية</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+    
+    <main class="calculator-container">
+        <header>
+            <h1>الزمن بدقة</h1>
+            <p>اسحب الأرقام لتحديد تاريخ ميلادك وسافَر عبر الزمن</p>
+        </header>
+
+        <section class="picker-section">
+            <div class="picker-headers">
+                <div class="picker-label">اليوم</div>
+                <div class="picker-label">الشهر</div>
+                <div class="picker-label">السنة</div>
+            </div>
+            <div class="picker-wrapper">
+                <div class="picker-highlight"></div>
+                <div class="picker-viewport" id="picker-day"></div>
+                <div class="picker-viewport" id="picker-month"></div>
+                <div class="picker-viewport" id="picker-year"></div>
+            </div>
+            <div id="global-error" class="error-msg"></div>
+        </section>
+
+        <div class="divider">
+            <button id="calculate-btn" class="calc-btn" aria-label="احسب العمر">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <polyline points="19 12 12 19 5 12"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <section class="results-section" id="results-section">
+            <div class="main-results">
+                <div class="result-item">
+                    <span class="result-number" id="result-years">--</span>
+                    <span class="result-label">سنة</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-number" id="result-months">--</span>
+                    <span class="result-label">شهر</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-number" id="result-days">--</span>
+                    <span class="result-label">يوم</span>
+                </div>
+            </div>
+
+            <div class="detailed-stats">
+                <div class="stat-box">
+                    <div class="stat-title">يوم الميلاد</div>
+                    <div class="stat-value" id="born-day">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">العمر الهجري</div>
+                    <div class="stat-value" id="hijri-age" style="font-size: 1.1rem;">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">الإجمالي بالأشهر</div>
+                    <div class="stat-value" id="total-months">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">بـالأسابيـع</div>
+                    <div class="stat-value" id="total-weeks">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">بـالأيــــام</div>
+                    <div class="stat-value" id="total-days">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">بـالساعـــات</div>
+                    <div class="stat-value" id="total-hours">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">بـالدقائـــق</div>
+                    <div class="stat-value" id="total-minutes">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">بـالثوانـــي</div>
+                    <div class="stat-value" id="total-seconds">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">أيام النوم 💤</div>
+                    <div class="stat-value" id="sleep-days">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">وجبات الطعام 🍕</div>
+                    <div class="stat-value" id="food-meals">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">قمر ليلة ميلادك 🌙</div>
+                    <div class="stat-value" id="moon-phase" style="font-size: 1.1rem;">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">عمرك على المريخ 🔴</div>
+                    <div class="stat-value" id="mars-age">--</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-title">على المشتري 🪐</div>
+                    <div class="stat-value" id="jupiter-age">--</div>
+                </div>
+            </div>
+
+            <div class="fun-facts" id="fun-facts-container">
+                <h3>هل تعلم؟ 💡</h3>
+                <p id="fact-demographic"></p>
+                <p id="fact-population"></p>
+                <p id="fact-world"></p>
+                <p id="fact-historical"></p>
+                <p id="fact-tech"></p>
+                <p id="fact-billion"></p>
+                <p id="fact-day"></p>
+                <p id="fact-celebrity"></p>
+            </div>
+
+            <div class="life-countdown" id="life-countdown-container">
+                <h3>رحلة الحياة ⏳</h3>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="life-progress"></div>
+                </div>
+                <div class="life-stats">
+                    <span id="lived-time">عشت: --</span>
+                    <span id="remaining-time">متبقي: --</span>
+                </div>
+                <p id="life-countdown-timer" class="countdown-timer">--</p>
+                <p class="life-note">بناءً على متوسط عمر 72 عاماً. اجعل كل ثانية قادمة ذات قيمة.</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
