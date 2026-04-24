@@ -125,12 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Moon Phase Calculation
         document.getElementById('moon-phase').innerHTML = getMoonPhase(y, m, d);
 
-        // Hijri Age Calculation
-        const diffDays = (now - inputDate) / (1000 * 60 * 60 * 24);
-        const hijriYears = Math.floor(diffDays / 354.36708);
-        const hijriMonths = Math.floor((diffDays % 354.36708) / 29.53059);
-        document.getElementById('hijri-age').textContent = `${hijriYears} years and ${hijriMonths} months`;
-
         // Facts Data
         updateFacts(ageY, inputDate);
 
@@ -184,16 +178,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (remainingMs > 0) {
             const lifePct = (diffMs / lifeTotalMs) * 100;
             document.getElementById('life-progress').style.width = `${lifePct}%`;
-            document.getElementById('lived-time').textContent = `Lived: ${Math.floor(lifePct)}%`;
-            document.getElementById('remaining-time').textContent = `Remaining: ${Math.floor(100 - lifePct)}%`;
+            document.getElementById('lived-time').textContent = `Lived: ${Math.round(lifePct)}%`;
+            document.getElementById('remaining-time').textContent = `Remaining: ${Math.round(100 - lifePct)}%`;
+
+            let remY = expectedDeath.getFullYear() - now.getFullYear();
+            let tempDate = new Date(now);
+            tempDate.setFullYear(now.getFullYear() + remY);
+            if (tempDate > expectedDeath) {
+                remY--;
+                tempDate.setFullYear(now.getFullYear() + remY);
+            }
             
-            const rDays = Math.floor(remainingMs / (1000 * 60 * 60 * 24));
-            const rHours = Math.floor((remainingMs / (1000 * 60 * 60)) % 24);
-            const rMins = Math.floor((remainingMs / (1000 * 60)) % 60);
-            const rSecs = Math.floor((remainingMs / 1000) % 60);
+            const remTimeMs = expectedDeath - tempDate;
+            const rDays = Math.floor(remTimeMs / (1000 * 60 * 60 * 24));
+            const rHours = Math.floor((remTimeMs / (1000 * 60 * 60)) % 24);
+            const rMins = Math.floor((remTimeMs / (1000 * 60)) % 60);
+            const rSecs = Math.floor((remTimeMs / 1000) % 60);
             
             document.getElementById('life-countdown-timer').textContent = 
-                `${rDays}d : ${String(rHours).padStart(2,'0')}h : ${String(rMins).padStart(2,'0')}m : ${String(rSecs).padStart(2,'0')}s`;
+                `${remY}y : ${rDays}d : ${String(rHours).padStart(2,'0')}h : ${String(rMins).padStart(2,'0')}m : ${String(rSecs).padStart(2,'0')}s`;
         } else {
             document.getElementById('life-progress').style.width = '100%';
             document.getElementById('lived-time').textContent = `Lived: 100%`;
@@ -484,7 +487,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (dist < maxDist) {
                     const ratio = Math.max(0, 1 - (dist / (itemHeight * 1.5)));
-                    item.style.fontSize = `${1.2 + ratio * 1.5}rem`; 
+                    // Scale down the font-size slightly for better fit on mobile
+                    const baseSize = window.innerWidth < 480 ? 1.0 : 1.2;
+                    const scaleFactor = window.innerWidth < 480 ? 0.8 : 1.5;
+                    item.style.fontSize = `${baseSize + ratio * scaleFactor}rem`;
                     item.style.opacity = 0.3 + (ratio * 0.7);
                     item.style.color = ratio > 0.8 ? 'var(--primary)' : 'var(--text-main)';
                     if (ratio > 0.8) {
