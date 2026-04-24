@@ -306,6 +306,7 @@ header p {
     padding: 1rem;
     text-align: center;
     transition: transform 0.3s ease;
+    min-width: 0; /* Prevents flex/grid items from overflowing */
 }
 
 .stat-box:hover {
@@ -321,10 +322,13 @@ header p {
 }
 
 .stat-value {
-    font-size: 1.4rem;
+    font-size: clamp(0.85rem, 3.8vw, 1.3rem);
     font-weight: 800;
     color: #e2e8f0;
-    font-family: 'Inter', monospace; /* Great for numbers ticking */
+    font-family: 'Inter', monospace;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.2;
 }
 
 #born-day {
@@ -370,10 +374,20 @@ header p {
 
 @media (max-width: 400px) {
     .detailed-stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+    .stat-box {
+        padding: 0.75rem 0.4rem;
     }
     .picker-label {
         font-size: 0.75rem;
+    }
+    .calculator-container {
+        padding: 1.5rem 0.75rem;
+    }
+    .result-item {
+        font-size: clamp(1.8rem, 8vw, 3rem);
     }
 }
 
@@ -419,12 +433,13 @@ header p {
 }
 
 .countdown-timer {
-    font-size: clamp(1.2rem, 6vw, 2rem);
+    font-size: clamp(1rem, 5vw, 1.8rem);
     font-family: 'Inter', monospace;
     color: #fca5a5;
     font-weight: 800;
     margin-bottom: 0.5rem;
-    word-break: break-all;
+    overflow-wrap: break-word;
+    word-break: normal;
 }
 
 .life-note {
