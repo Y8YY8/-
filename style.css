@@ -1,16 +1,19 @@
 :root {
-    --bg-color: #050505;
-    --container-bg: rgba(15, 15, 18, 0.85);
-    --primary: #e2e8f0; /* Premium Silver */
+    --bg-color: #000000;
+    --container-bg: rgba(20, 20, 23, 0.7);
+    --card-bg: rgba(30, 30, 35, 0.4);
+    --primary: #ffffff; /* Pure White for high contrast on dark */
+    --silver: #e2e8f0;
     --primary-hover: #ffffff;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --error: #ff4b4b;
-    --border: rgba(255, 255, 255, 0.08);
-    --glass-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.9);
-    --gradient-1: #cbd5e1; /* Silver */
-    --gradient-2: #475569; /* Slate/Dark Silver */
-    --accent-glow: rgba(226, 232, 240, 0.15);
+    --text-main: #ffffff;
+    --text-muted: #8e8e93; /* iOS Muted Text */
+    --error: #ff3b30; /* iOS Red */
+    --border: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    --gradient-1: #3a3a3c; /* iOS Dark Gray */
+    --gradient-2: #1c1c1e;
+    --accent-glow: rgba(255, 255, 255, 0.05);
 }
 
 * {
@@ -20,17 +23,19 @@
 }
 
 body {
-    font-family: 'Inter', 'Tajawal', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Tajawal', sans-serif;
     background-color: var(--bg-color);
     background-image:
-        radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
-    background-size: 32px 32px;
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 2px 2px, rgba(255,255,255,0.02) 1px, transparent 0);
+    background-size: 100% 100%, 32px 32px;
     color: var(--text-main);
     min-height: 100vh;
     padding: clamp(1rem, 5vw, 2rem) 1rem;
     position: relative;
     overflow-x: hidden;
     width: 100%;
+    -webkit-font-smoothing: antialiased;
 }
 
 /* Background Animated Orbs - Modified for subtle dark glow */
@@ -76,15 +81,17 @@ body {
 /* Main Container - Glassmorphism Refined */
 .calculator-container {
     background: var(--container-bg);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid var(--border);
-    border-radius: 28px;
+    backdrop-filter: blur(50px) saturate(180%);
+    -webkit-backdrop-filter: blur(50px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: 38px;
     padding: clamp(1.5rem, 5vw, 3rem);
     width: 100%;
-    max-width: 650px;
+    max-width: 680px;
     margin: 0 auto;
-    box-shadow: var(--glass-shadow);
+    box-shadow:
+        var(--glass-shadow),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -119,10 +126,10 @@ header h1 {
 .site-logo {
     width: 120px;
     height: 120px;
-    border-radius: 50%;
+    border-radius: 32px; /* Squirrel/iPhone Shape */
     object-fit: cover;
-    border: 2px solid var(--border);
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .visually-hidden {
@@ -147,10 +154,11 @@ header p {
 .picker-section {
     position: relative;
     margin: 1rem 0;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 24px;
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 28px;
+    border: 1px solid var(--glass-border);
     padding: 1.5rem 1rem;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .picker-headers {
@@ -179,16 +187,16 @@ header p {
 .picker-highlight {
     position: absolute;
     top: 50%;
-    left: 0;
-    right: 0;
+    left: 10px;
+    right: 10px;
     height: 60px;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.03);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
     z-index: 1;
     pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .picker-viewport {
@@ -219,13 +227,14 @@ header p {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: clamp(1.4rem, 5vw, 1.8rem);
+    font-size: clamp(1.5rem, 5vw, 2rem);
     font-weight: 700;
-    color: var(--text-main);
-    opacity: 0.2;
+    color: #ffffff;
+    opacity: 0.15;
     scroll-snap-align: center;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     user-select: none;
+    letter-spacing: -1px;
 }
 
 .error-msg {
@@ -242,8 +251,8 @@ header p {
 .divider {
     position: relative;
     height: 1px;
-    background: var(--border);
-    margin: 1.5rem 0;
+    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+    margin: 2.5rem 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -251,19 +260,22 @@ header p {
 
 .calc-btn {
     position: absolute;
-    background: linear-gradient(135deg, #f8fafc, #94a3b8);
-    border: none;
+    background: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    width: 64px;
-    height: 64px;
+    width: 68px;
+    height: 68px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #000;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow:
+        0 10px 30px rgba(255, 255, 255, 0.1),
+        inset 0 2px 4px rgba(255, 255, 255, 0.5);
     padding: 0;
+    z-index: 10;
 }
 
 .calc-btn svg {
@@ -311,46 +323,66 @@ header p {
 }
 
 .result-number {
-    color: var(--primary);
-    text-shadow: 0 0 30px var(--accent-glow);
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    font-variant-numeric: tabular-nums;
 }
 
 .result-label {
-    color: var(--text-muted);
-    font-size: clamp(1.2rem, 5vw, 2rem);
-    font-weight: 500;
-    letter-spacing: 0;
+    color: #8e8e93;
+    font-size: clamp(1.1rem, 4vw, 1.8rem);
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    margin-left: 4px;
 }
 
 /* Detailed Grid Stats */
 .detailed-stats {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(clamp(120px, 45%, 1fr), 1fr));
-    gap: 0.75rem;
+    gap: 0.85rem;
 }
 
 .stat-box {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border);
-    border-radius: 18px;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 22px;
     padding: 1.2rem 1rem;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-box::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
 .stat-box:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.stat-box:hover::after {
+    opacity: 1;
 }
 
 .stat-title {
     font-size: 0.75rem;
-    color: #64748b;
-    margin-bottom: 0.6rem;
-    font-weight: 800;
+    color: #98989d; /* iOS Light Gray for labels */
+    margin-bottom: 0.8rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
 }
 
 .stat-value {
@@ -366,24 +398,41 @@ header p {
 
 /* Info Sections Universal Style */
 .info-section {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 1.5rem;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    padding: 1.8rem;
+    transition: all 0.3s ease;
+}
+
+.info-section:hover {
+    border-color: rgba(255,255,255,0.25);
 }
 
 /* Fun Facts Section */
 .fun-facts {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(0,0,0,0));
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent);
+    position: relative;
+    overflow: hidden;
+}
+
+.fun-facts::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+    pointer-events: none;
 }
 
 .fun-facts h3 {
-    color: #f1f5f9;
-    font-size: 1.1rem;
-    margin-bottom: 1.2rem;
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
 .fun-facts p {
@@ -404,53 +453,81 @@ header p {
 /* Life Countdown Section */
 .life-countdown {
     text-align: center;
+    position: relative;
+    padding-top: 2rem !important;
 }
 
 .life-countdown h3 {
     color: #ffffff;
-    font-size: 1.1rem;
-    margin-bottom: 1.2rem;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    font-weight: 800;
 }
 
 .progress-bar-container {
     width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 16px;
+    padding: 4px;
+    border: 1px solid var(--glass-border);
     overflow: hidden;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+    position: relative;
 }
 
 .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #475569, #f8fafc);
+    background: linear-gradient(90deg, #3a3a3c, #ffffff);
+    border-radius: 12px;
     width: 0%;
-    transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: width 2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+    border-radius: inherit;
 }
 
 .life-stats {
     display: flex;
     justify-content: space-between;
-    font-size: 0.8rem;
-    color: #64748b;
-    margin-bottom: 1.2rem;
-    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
 }
 
+#lived-time { color: #ffffff; }
+
 .countdown-timer {
-    font-size: clamp(1.2rem, 5vw, 2rem);
-    font-family: 'Inter', monospace;
+    font-size: clamp(1.8rem, 7vw, 3rem);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
     color: #ffffff;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-    letter-spacing: -1px;
+    font-weight: 900;
+    margin: 1.5rem 0;
+    letter-spacing: -1.5px;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+    line-height: 1;
+}
+
+.life-note {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-style: italic;
 }
 
 /* Amazing Discoveries */
 .amazing-discovery {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.02), rgba(0,0,0,0));
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent);
 }
 
 .discovery-grid {
@@ -461,30 +538,48 @@ header p {
 }
 
 .discovery-card {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border);
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
+    border-radius: 22px;
     padding: 1.2rem;
     display: flex;
     align-items: center;
     gap: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.discovery-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+    transform: skewX(-25deg);
+    transition: 0.75s;
 }
 
 .discovery-card:hover {
-    border-color: rgba(255,255,255,0.2);
-    transform: scale(1.02);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.discovery-card:hover::before {
+    left: 150%;
 }
 
 .discovery-icon {
-    font-size: 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    width: 48px;
-    height: 48px;
+    font-size: 1.6rem;
+    background: rgba(255, 255, 255, 0.08);
+    width: 52px;
+    height: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    border-radius: 14px;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
 }
 
 .discovery-info {
@@ -516,13 +611,14 @@ header p {
 
 /* Life Timeline Section */
 .life-timeline-section {
-    background: rgba(0, 0, 0, 0.2);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent);
 }
 
 .timeline-table-wrapper {
     overflow-x: auto;
-    border-radius: 16px;
-    border: 1px solid var(--border);
+    border-radius: 22px;
+    border: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .timeline-table {
@@ -532,25 +628,26 @@ header p {
 }
 
 .timeline-table th {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.05);
     color: #ffffff;
-    padding: 14px;
+    padding: 18px 14px;
     text-align: left;
     font-weight: 800;
     text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    border-bottom: 1px solid var(--border);
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid var(--glass-border);
 }
 
 .timeline-table td {
-    padding: 14px;
-    border-bottom: 1px solid var(--border);
-    color: #94a3b8;
+    padding: 16px 14px;
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    font-weight: 500;
 }
 
 .timeline-table tr.current-age {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
 
@@ -562,21 +659,27 @@ header p {
 .show-more-btn {
     display: block;
     width: 100%;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
     color: #ffffff;
-    padding: 12px;
-    border-radius: 12px;
-    margin-top: 1.2rem;
+    padding: 16px;
+    border-radius: 18px;
+    margin-top: 1.5rem;
     cursor: pointer;
     font-weight: 700;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .show-more-btn:hover {
-    background: #ffffff;
-    color: #000;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.show-more-btn:active {
+    transform: scale(0.98);
 }
 
 /* Insight Card Special Styling - Adapted for Silver */
