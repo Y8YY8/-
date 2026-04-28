@@ -362,13 +362,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('val-advice').textContent = randomTip;
             document.getElementById('icon-advice').textContent = randomIcon;
 
-            // Randomize the glow color slightly for unique experience
-            const hues = [200, 260, 330, 150]; // Blue, Purple, Pink, Green
+            // Randomize the glow color slightly for unique experience (Silver/Metallic tones)
+            const hues = [210, 220, 200, 190]; // Shades of Silver/Steel Blue
             const randomHue = hues[Math.floor(Math.random() * hues.length)];
-            const color = `hsl(${randomHue}, 80%, 60%)`;
+            const color = `hsl(${randomHue}, 20%, 80%)`;
             document.getElementById('advice-card').style.setProperty('--advice-color', color);
-            document.getElementById('icon-advice').style.background = `hsla(${randomHue}, 80%, 60%, 0.15)`;
-            document.getElementById('icon-advice').style.color = color;
+            document.getElementById('icon-advice').style.background = `hsla(${randomHue}, 20%, 80%, 0.1)`;
+            document.getElementById('icon-advice').style.color = '#ffffff';
         }
 
         // Season Logic
@@ -680,7 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     item.style.opacity = 0.3 + (ratio * 0.7);
                     item.style.color = ratio > 0.8 ? 'var(--primary)' : 'var(--text-main)';
                     if (ratio > 0.8) {
-                        item.style.textShadow = '0 0 15px rgba(14, 165, 233, 0.4)';
+                item.style.textShadow = '0 0 20px rgba(255, 255, 255, 0.2)';
                         item.classList.add('active');
                         newActiveIndex = index;
                     } else {
