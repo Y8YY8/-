@@ -678,20 +678,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     const scaleFactor = window.innerWidth < 480 ? 0.8 : 1.5;
                     item.style.fontSize = `${baseSize + ratio * scaleFactor}rem`;
                     item.style.opacity = 0.3 + (ratio * 0.7);
-                    item.style.color = ratio > 0.8 ? 'var(--primary)' : 'var(--text-main)';
+
                     if (ratio > 0.8) {
-                item.style.textShadow = '0 0 20px rgba(255, 255, 255, 0.2)';
                         item.classList.add('active');
                         newActiveIndex = index;
                     } else {
-                        item.style.textShadow = 'none';
                         item.classList.remove('active');
                     }
                 } else {
                     item.style.fontSize = '1.2rem';
                     item.style.opacity = '0.3';
-                    item.style.color = 'var(--text-main)';
-                    item.style.textShadow = 'none';
                     item.classList.remove('active');
                 }
             });
